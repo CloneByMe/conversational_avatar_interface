@@ -1,44 +1,87 @@
-# Avatar Integration Example
+# 🧠 Conversational Avatar Interface | CloneByMe
 
-This project is a demonstration of how to integrate our avatars into a website via an iframe. The example shows how to:
+This project provides a conversational interface with an integrated avatar that sends messages to a webhook (e.g., [n8n](https://n8n.io/) or [Make](https://www.make.com/)), where an AI agent can process them and return a spoken response through the avatar.
 
-- **Receive Messages**: Listen for messages from the iframe (e.g., questions and images).
-- **Send Messages**: Send text to the avatar for it to speak.
+## 🚀 Features
 
-## Features
+- Easy integration with CloneByMe to display an interactive avatar.
+- Communication via `iframe` with a custom webhook.
+- Compatible with automation platforms like n8n and Make.
+- Configurable interface with optional functions (toggle messages or typing dots).
 
-- **Embedded Iframe**: Loads the avatar chat widget.
-- **Bidirectional Communication**: Uses `postMessage` for message exchange between the parent page and the iframe.
+---
 
-## Getting Started
+## 🛠️ Installation & Usage
 
-### Clone the Repository:
+1. **Clone this repository**:
+   ```bash
+   git clone https://github.com/CloneByMe/conversational_avatar_interface.git
+   cd your-repo
+   ```
 
-git clone https://github.com/CloneByMe/n8n-avatar-agent.git
+2. **Configure your token and webhook**:  
+   Open the `index.html` file (or your chosen filename) and replace the following lines:
 
-### Configure the Avatar Token:
+   ```js
+   const AVATAR_TOKEN = "[YOUR CLONEBYME ENTERPRISE TOKEN]";
+   const WEBHOOK_URL = "[YOUR WEBHOOK URL]";
+   ```
 
-Open the `index.html` file and replace `[YOUR_AVATAR_TOKEN]` in the iframe URL with your actual avatar token.
+   - `AVATAR_TOKEN`: Get this from your account at [CloneByMe](https://app.clonebyme.com) in Share page.
+   - `WEBHOOK_URL`: The URL of your webhook configured in n8n or Make, which receives the question and returns the AI's response as JSON.
 
-### Run the Example:
+3. **Open the file in your browser**:
+   Simply open the HTML file in your browser to test it locally.
 
-Open the `index.html` file in your browser (either directly or using a local web server).
+---
 
-## How It Works
+## 📦 Expected Webhook Send Format
 
-The iframe loads the chat widget from:
+The webhook will receive a JSON payload like this:
 
-https://app.clonebyme.com/chat-widget?avatar=[YOUR_AVATAR_TOKEN]
+```json
+{
+  "question": "Hello!"
+}
+```
 
-The JavaScript in the page handles:
+- `question`: The message sent by the user that needs to be processed by your AI agent.
 
-- **Listening for Messages**: It listens for messages from the iframe and displays them in the appropriate section.
-- **Sending Messages**: It sends text entered by the user to the iframe so that the avatar can speak it.
+---
 
-## Contributing
+## 📦 Expected Webhook Response Format
 
-If you want to improve this example or adapt it to your needs, feel free to submit a pull request or open an issue.
+The webhook should return a JSON response like this:
 
-## License
+```json
+{
+  "response": "Hello! I'm here to help you."
+}
+```
+
+- `response`: The message that will be spoken by the avatar.
+
+---
+
+## 📋 Optional Features
+
+- `setStateOfTypingDots(true/false)`: Show or hide typing dots.
+- `showMessagesContainer(true/false)`: Show or hide the message container inside the iframe.
+
+---
+
+## 🤖 Requirements
+
+- An account on [CloneByMe](https://app.clonebyme.com).
+- A webhook configured on n8n, Make, or any backend that can accept and respond with JSON.
+
+---
+
+
+## 📄 License
 
 Unlicense
+
+---
+
+Enhance your conversational experience by connecting your AI agent to an avatar!
