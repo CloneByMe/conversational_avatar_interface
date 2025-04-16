@@ -16,7 +16,7 @@ This project provides a conversational interface with an integrated avatar that 
 1. **Clone this repository**:
    ```bash
    git clone https://github.com/CloneByMe/conversational_avatar_interface.git
-   cd your-repo
+   cd conversational_avatar_interface
    ```
 
 2. **Configure your token and webhook**:  
