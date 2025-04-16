@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conversational Avatar Interface | CloneByMe</title>
+</head>
+<body>
+
+  <script>
+
+    // 🔧 Configuration
+    // Set your unique avatar token and webhook URL here
+    const AVATAR_TOKEN = "[YOUR CLONEBYME ENTERPRISE TOKEN]";
+    const WEBHOOK_URL = "[YOUR WEBHOOK URL]";
+
+
+    // Dynamically write the script tag using the avatar token
+    document.write(`<script src="https://app.clonebyme/api/embed/generate-chat-script?token=${AVATAR_TOKEN}"><\/script>`);
+
+    // Listen for messages from the iframe
+    window.addEventListener("message", async (event) => {
+      switch (event.data.type) {
+        case "AVATAR_READY":
+          console.log(event.data);
+          break;
+
+        case "NEW_QUESTION":
+          console.log(event.data);
+          await handleNewQuestion(event.data.message);
+          break;
+
+        case "NEW_IMAGE":
+          console.log(event.data.imageBase64);
+          break;
+
+        case "STOP_TALKING":
+          console.log(event.data);
+          break;
+      }
+    });
+
+
+    /**
+     * Handles a new question sent from the iframe.
+     * Sends the question to the webhook and replies to the iframe with the agent's message, if available.
+     * @param {string} message - The question received from the iframe.
+     */
+    async function handleNewQuestion(message) {
+      try {
+        const response = await fetch(WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question: message })
+        });
+
+        const result = await response.json();
+
+        if (result.agentMessage) {
+          sendMessage(result.response);
+        }
+      } catch (err) {
+        console.error("Error handling NEW_QUESTION:", err);
+      }
+    }
+
+    /**
+     * Sends a message to the iframe to be spoken by the avatar.
+     * @param {string} message - The message to be spoken.
+     */
+    function sendMessage(message) {
+      const iframe = document.querySelector('body > div').shadowRoot.getElementById(AVATAR_TOKEN);
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ type: "TALK", message: message }, "*");
+      }
+    }
+
+
+
+
+    // 🧩 Optional Features
+    // These functions allow additional control over the chat UI inside the avatar iframe.
+    // You can choose to call them depending on your specific use case.
+
+
+    /**
+     * Toggles the visibility of typing dots in the chat interface inside the iframe.
+     * @param {boolean} value - Whether to show (`true`) or hide (`false`) the typing dots.
+     */
+    function setStateOfTypingDots(value) {
+      const iframe = document.getElementById("chat-iframe");
+      const state = value ? 'SHOW_TYPING_DOTS' : 'HIDE_TYPING_DOTS';
+
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ type: state }, "*");
+        console.log(state);
+      }
+    }
+
+    /**
+     * Shows or hides the messages container within the iframe chat interface.
+     * @param {boolean} state - Whether to show (`true`) or hide (`false`) the container.
+     */
+    function showMessagesContainer(state) {
+      const iframe = document.getElementById("chat-iframe");
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ type: "SHOW_MESSAGES_CONTAINER", state: state }, "*");
+      }
+    }
+
+  </script>
+
+</body>
+</html>
