@@ -67,6 +67,7 @@ The webhook should return a JSON response like this:
 
 - `setStateOfTypingDots(true/false)`: Show or hide typing dots.
 - `showMessagesContainer(true/false)`: Show or hide the message container inside the iframe.
+- `showClearConversationBtn(true/false)`: Show or hide the clear conversation button inside the iframe.
 
 ---
 
