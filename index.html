@@ -109,6 +109,20 @@
       }
     }
 
+    /**
+     * Shows or hides the recicle bin within the iframe chat interface.
+     * @param {boolean} state - Whether to show (`true`) or hide (`false`) the Trash button.
+    */
+    function showClearConversationBtn(state) {
+      const iframe = document.getElementById("chat-iframe");
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage(
+          { type: "SHOW_CLEAR_CONVERSATION_BTN", state: state },
+          "*"
+        );
+      } 
+    }
+
   </script>
 
 </body>
